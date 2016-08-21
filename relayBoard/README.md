@@ -1,1 +1,1 @@
-# Tests with vellemann board ka05
+# Tests with velleman board ka05
