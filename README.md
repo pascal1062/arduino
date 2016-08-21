@@ -1,1 +1,1 @@
-# All my arduino projects.
+# All my arduino projects. Include tests and final projects.
