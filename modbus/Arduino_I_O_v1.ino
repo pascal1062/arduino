@@ -1,4 +1,9 @@
 
+/*
+  velleman board kit ka05 TEST
+*/
+
+
 int AI_1 = 0;
 int AI_2 = 0;
 int AI_3 = 0;
