@@ -1,5 +1,9 @@
 #include <SimpleModbusSlave.h>
 
+/*
+  velleman board kit ka05 + arduino + modbus serial
+*/
+
 byte i = 0;
 byte Relay1 = 0;
 byte Relay2 = 0;
