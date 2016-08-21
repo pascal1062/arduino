@@ -1,1 +1,3 @@
-# gg
+# IO board 
+
+ARDUINO UNO + ARDUINO YUN + VELLEMAN KA05
