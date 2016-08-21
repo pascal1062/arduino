@@ -6,5 +6,5 @@
 - receive data from raspberry pi with modbus TCP protocol. To use with my home automation php site.
 
 ### Version 2 (REST): 
-- receive data from raspberry pi with a REST API. To use with OpenHAB site.
+- receive data from raspberry pi with REST API. To use with OpenHAB site.
 
