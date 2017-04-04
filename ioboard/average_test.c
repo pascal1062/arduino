@@ -1,37 +1,53 @@
 
-int analogInputAvg1[10];
-int count = 0;
+int analogInputAvg[8]; 
+int readingsAI1[10];
+int readingsAI2[10];
+int readingsAI3[10];
+int readingsAI4[10];
+int readingsAI5[10];
+int readingsAI6[10];
+int readingsAI7[10];
+int readingsAI8[10];
+byte count = 0;
+long previousMillisB = 0;
 
-void readAvgAnalogIn() {  
+void readAvgAnalogPin() {  
   unsigned long currentMillis = millis();
 
-  if(currentMillis - previousMillis > 2) {
-    previousMillis = currentMillis;
+  if(currentMillis - previousMillisA > 5) {
+    previousMillisA = currentMillis;
 
-    //after 10 count reset to  0 and count again...
-    analogInputAvg1[count] = analogInput[0];
-    analogInputAvg2[count] = analogInput[2];
-    analogInputAvg3[count] = analogInput[3];
-    .....and so on to input #8
+    if (count > 9) count = 0;
+    readingsAI1[count] = analogInput[0];
+    readingsAI2[count] = analogInput[1];
+    readingsAI3[count] = analogInput[2];
+    readingsAI4[count] = analogInput[3];
+    readingsAI5[count] = analogInput[4];
+    readingsAI6[count] = analogInput[5];
+    readingsAI7[count] = analogInput[6];
+    readingsAI8[count] = analogInput[7]; 
+    count++;   
 
-
-    analogInputAvg[0] = averageCalc(0);  //moyenne des 10 cases....
-    analogInputAvg[1] = averaIngeCalc(1);  //moyenne des 10 cases....
-    analogInputAvg[2] = averaIngeCalc(2);  //moyenne des 10 cases....
-    .....and so on to input #8
+    analogInputAvg[0] = getAgerage(readingsAI1);
+    analogInputAvg[1] = getAgerage(readingsAI2);
+    analogInputAvg[2] = getAgerage(readingsAI3);
+    analogInputAvg[3] = getAgerage(readingsAI4);
+    analogInputAvg[4] = getAgerage(readingsAI5);
+    analogInputAvg[5] = getAgerage(readingsAI6);
+    analogInputAvg[6] = getAgerage(readingsAI7);
+    analogInputAvg[7] = getAgerage(readingsAI8);
+    
   }
- 
-
 }
 
-
-int averageCalc(byte inputNumber) {
+int getAgerage(int readings[10]) {
+    int sum = 0;
+    int avg = 0;
     
     for (int i = 0; i < 10; i++) {
-       total= total + analogInputAvg1[i]; 
-       average = total / 10; 
+       sum += readings[i]; 
     }
-    
-    return average;
-    
+    avg = sum / 10; 
+   
+    return avg;
 }
