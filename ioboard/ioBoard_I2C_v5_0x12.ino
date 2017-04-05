@@ -1,5 +1,8 @@
-//2016-12-06
-//Add crc to bytes sended on I2C. now message is 20 bytes long. 
+
+/*****************************************************************************
+  2017-04-05 -> Add INPUTS average calculations 
+  2016-12-06 -> Add crc to bytes sended on I2C. now message is 20 bytes long.
+******************************************************************************/
 
 // inslude the SPI library:
 #include <SPI.h>
@@ -10,7 +13,7 @@
 SPISettings MCP3008(500000, MSBFIRST, SPI_MODE0);
 SPISettings TLC5620(500000, MSBFIRST, SPI_MODE1);
 
-// set pin 10 as the slave select
+// set slave select pins
 const int adcChipSelect = 8;
 const int dacLoadPin[] = {10, 9}; //LOAD pin. 2 DACs TLC5620
 
@@ -23,6 +26,18 @@ int aiIdx = 0;
 
 byte analogOutput[8];
 const byte dacAddress[] = {0x03, 0x01, 0x05, 0x07}; //DAC addr and range bit. first bytes to send to TLC5620
+
+int analogInputAvg[8]; 
+int readingsAI1[10];
+int readingsAI2[10];
+int readingsAI3[10];
+int readingsAI4[10];
+int readingsAI5[10];
+int readingsAI6[10];
+int readingsAI7[10];
+int readingsAI8[10];
+byte count = 0;
+
 
 void setup() {
 
@@ -53,8 +68,9 @@ void loop() {
     analogInTwoBytes(i);
   }
 
+  readAvgAnalogIn();
   analogOutputWrite();
-  //serialOut();
+ 
 }
 
 int adcChannelRead(byte readAddress) {
@@ -74,9 +90,50 @@ int adcChannelRead(byte readAddress) {
   return dataMSB << 8 | dataLSB;
 }
 
+void readAvgAnalogIn() {  
+  unsigned long currentMillis = millis();
+
+  if(currentMillis - previousMillis  > 5) {
+    previousMillis = currentMillis;
+
+    if (count > 9) count = 0;
+    readingsAI1[count] = analogInput[0];
+    readingsAI2[count] = analogInput[1];
+    readingsAI3[count] = analogInput[2];
+    readingsAI4[count] = analogInput[3];
+    readingsAI5[count] = analogInput[4];
+    readingsAI6[count] = analogInput[5];
+    readingsAI7[count] = analogInput[6];
+    readingsAI8[count] = analogInput[7]; 
+    count++;   
+
+    analogInputAvg[0] = getAgerage(readingsAI1);
+    analogInputAvg[1] = getAgerage(readingsAI2);
+    analogInputAvg[2] = getAgerage(readingsAI3);
+    analogInputAvg[3] = getAgerage(readingsAI4);
+    analogInputAvg[4] = getAgerage(readingsAI5);
+    analogInputAvg[5] = getAgerage(readingsAI6);
+    analogInputAvg[6] = getAgerage(readingsAI7);
+    analogInputAvg[7] = getAgerage(readingsAI8);
+    
+  }
+}
+
+int getAgerage(int readings[10]) {
+    int sum = 0;
+    int avg = 0;
+    
+    for (int i = 0; i < 10; i++) {
+       sum += readings[i]; 
+    }
+    avg = sum / 10; 
+   
+    return avg;
+}
+
 void analogInTwoBytes(int id) { //Put 10 bits analog input in two separate bytes. For sending through I2C.
   //extract high and low from analog input readings. Stores in array after....
-  int AnlgIn = analogInput[id];
+  int AnlgIn = analogInputAvg[id];
   byte high = (AnlgIn >> 8) & 0xFF;
   byte low = AnlgIn & 0xFF;
 
@@ -198,46 +255,4 @@ unsigned int generateCRC(byte *buf, byte messageLength) {
   return crc;
 }
 
-void serialOut() {
-  unsigned long currentMillis = millis();
-
-  if (currentMillis - previousMillis > 1000) {
-    // save the last time
-    previousMillis = currentMillis;
-
-    Serial.print(analogInput[0]);
-    Serial.print(";");
-    Serial.print(analogInput[1]);
-    Serial.print(";");
-    Serial.print(analogInput[2]);
-    Serial.print(";");
-    Serial.print(analogInput[3]);
-    Serial.print(";");
-    Serial.print(analogInput[4]);
-    Serial.print(";");
-    Serial.print(analogInput[5]);
-    Serial.print(";");
-    Serial.print(analogInput[6]);
-    Serial.print(";");
-    Serial.print(analogInput[7]);
-    Serial.println();;
-
-    //Serial.print(analogOutput[0]);
-    //Serial.print(";");
-    //Serial.print(analogOutput[1]);
-    //Serial.print(";");
-    //Serial.print(analogOutput[2]);
-    //Serial.print(";");
-    //Serial.print(analogOutput[3]);
-    //Serial.print(";");
-    //Serial.print(analogOutput[4]);
-    //Serial.print(";");
-    //Serial.print(analogOutput[5]);
-    //Serial.print(";");
-    //Serial.print(analogOutput[6]);
-    //Serial.print(";");
-    //Serial.print(analogOutput[7]);
-    //Serial.println();;
-  }
-}
-
+//Fin
