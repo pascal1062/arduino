@@ -1,0 +1,64 @@
+// ClickButton library example
+//
+// Usage: ClickButton buttonObject(pin [LOW/HIGH, [CLICK_PULLUP]]);
+//
+//   where LOW/HIGH denotes active LOW or HIGH button (default is LOW)
+//   CLICK_PULLUP is only possible with active low buttons.
+//
+//
+// 2010.06.15 raron
+
+
+#include "ClickButton.h"
+
+
+// the LED
+const int ledPin = 13;
+int ledState = 0;
+
+// the Button
+const int buttonPin1 = 2;
+ClickButton button1(buttonPin1, LOW, CLICK_PULLUP);
+int lastDecoded = 0;    // Needs to store the previous returned button click code
+
+
+void setup()
+{
+  pinMode(ledPin,OUTPUT);  
+}
+
+
+void loop()
+{
+  button1.Update();  // update button state (Will return the last code anyway, if no new clicks are decoded)
+  
+  // Toggle LED on single clicks
+  if(button1.click == CLICK_SINGLECLICK && button1.click != lastDecoded) ledState = !ledState;
+
+  // slow blink (must hold down button. 1 second blinks)
+  if(button1.click == CLICK_SINGLEHOLD) ledState = (millis()/1000)%2;
+
+  // slower blink (must hold down button. 2 second blinks)
+  if(button1.click == CLICK_DOUBLEHOLD) ledState = (millis()/2000)%2;
+
+  // even slower blink (must hold down button. 3 second blinks)
+  if(button1.click == CLICK_TRIPLEHOLD) ledState = (millis()/3000)%2;
+
+  // blink if double clicked
+  if(button1.click == CLICK_DOUBLECLICKED) ledState = (millis()/500)%2;
+
+  // blink faster if triple clicked
+  if(button1.click == CLICK_TRIPLECLICKED) ledState = (millis()/200)%2;
+
+
+
+  // update the LED
+  digitalWrite(ledPin,ledState);
+
+  // Save previous button click code
+  lastDecoded = button1.click;
+}
+
+
+
+

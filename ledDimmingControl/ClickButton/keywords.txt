@@ -1,0 +1,35 @@
+#######################################
+# Syntax Coloring Map For PushButton
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+ClickButton	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+Update	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+CLICK_DEBOUNCE_DELAY	LITERAL1
+CLICK_MULTICLICK_DELAY	LITERAL1
+CLICK_HELDDOWN_DELAY	LITERAL1
+CLICK_PULLUP	LITERAL1
+CLICK_MAX_BUTTON_PRESSES	LITERAL1
+CLICK_TRIPLECLICKED	LITERAL1
+CLICK_DOUBLECLICKED	LITERAL1
+CLICK_SINGLECLICKED	LITERAL1
+CLICK_SINGLECLICK	LITERAL1
+CLICK_DOUBLECLICK	LITERAL1
+CLICK_TRIPLECLICK	LITERAL1
+CLICK_SINGLEHOLD	LITERAL1
+CLICK_DOUBLEHOLD	LITERAL1
+CLICK_TRIPLEHOLD	LITERAL1
+
